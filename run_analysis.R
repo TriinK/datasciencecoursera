@@ -24,14 +24,17 @@ test <- cbind(subject_test, y_test, X_test)
 combined <- rbind(train, test)
 
 # Extract only mean and standard deviation for each measurement.
-ex_features <- grepl("mean|std", names(combined))
-X_test = X_test[,ex_features]
+ex_features <- grepl("mean\\(\\)", names(combined)) | grepl("std\\(\\)", names(combined))
+ex_features[1:2] <- TRUE
+combined = combined[ ,ex_features]
 
 #Convert valus to factor
-combined$activity <- factor(combined$Activity, labels=c("Walking", "Walking Upstairs", "Walking Downstairs", "Sitting", "Standing", "Laying"))
+act_group <- factor(combined$Activity)
+levels(act_group) <- activity_labels[,2]
+combined$Activity <- act_group
 
 # Apply mean function to tidy dataset using dcast
 library(reshape2)
-melt_combined <- melt(combined, id=c("Subject_ID","activity"))
-tidy_data   = dcast(melt_combined, Subject_ID + activity ~ variable, mean)
+melt_combined <- melt(combined, (id.vars=c("Subject_ID","Activity")))
+tidy_data   = dcast(melt_combined, Subject_ID + Activity ~ variable, mean)
 write.table(tidy_data, file = "./tidy_data.txt", row.name=FALSE)
