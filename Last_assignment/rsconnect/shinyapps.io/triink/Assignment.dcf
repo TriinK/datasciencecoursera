@@ -1,0 +1,13 @@
+name: Assignment
+title: Assignment
+username:
+account: triink
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 256331
+bundleId: 1173109
+url: https://triink.shinyapps.io/Assignment/
+when: 1515746929.19112
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: flavors_of_cacao.csv|data/flavors_of_cacao.csv

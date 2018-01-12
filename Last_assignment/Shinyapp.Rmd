@@ -1,0 +1,58 @@
+---
+title: "Shiny app documentation"
+author: "Triin Kask"
+date: "12 January 2018"
+output: slidy_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+## Shiny app in Developing Data Products course
+
+This app uses build-in dataset called **mtcars** to predict horsepower (hp) and miles per gallon (mpg) relation using linear models. Two different models have been deployed. This dataset was used to create interactive plot. User can change sample size what is currently displayed position on the plot for both models.
+
+
+## Statistical analysis on the dataset
+
+```{r dataset, echo = TRUE, warn.conflicts = FALSE, quietly = TRUE, message = FALSE}
+library(rpart)
+library(rattle)
+
+#Look at the dataset
+dataset <- data(mtcars)
+summary(mtcars)
+
+#Use decision tree model to predict results
+set.seed(423220)
+mtcars$hp = as.factor(mtcars$hp)
+mtcars$mpg = as.factor(mtcars$mpg)
+model <- rpart(hp~mpg + cyl, data=mtcars, method="class")
+```
+
+Plot the result
+```{r plot, echo = TRUE, warn.conflicts = FALSE, quietly = TRUE, message = FALSE}
+library(rpart.plot)
+rpart.plot(model)
+```
+
+## Running prediction on the machine algoritm
+
+Prediction is runt on the car **Mazda RX4**
+```{r prediction, echo = TRUE, warn.conflicts = FALSE, quietly = TRUE, message = FALSE}
+library(caret)
+sampleData = mtcars[1,]
+sampleData[1,names(sampleData)] = rep(NA, length(names(sampleData)))
+sampleData[1, c('wt')] = c(4)
+Prediction <- predict(model, sampleData[1,], verbose = TRUE)
+Prediction
+```
+
+## Results
+
+Results show that the highest effect on horsepower has mpg parameter (miles per gallon). The linear correlation also shows from the app itself. However when prediction the result to one car model **Mazda RX4** the results are less 10% which means that horsepowers affect miles per gallon in certain brands.
+
+## Running app
+
+For running the app, click on the following [link](https://triink.shinyapps.io/Assignment/)
+
